@@ -2,7 +2,7 @@ Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
 Version:	2.0.3
-Release:	1
+Release:	2
 License:	MIT
 Group:		Libraries
 # Source0Download: http://luajit.org/download.html
@@ -55,13 +55,15 @@ sed -i -e '/install -m/s/-m/-p -m/' Makefile
 %build
 # Q= - enable verbose output
 # E= @: - disable @echo messages
+# NOTE: we use amalgamated build as per documentation suggestion doc/install.html
 %{__make} \
 	CC="%{__cc}" \
 	CCOPT="%{rpmcflags} -fomit-frame-pointer" \
 	CCOPT_x86= \
 	MULTILIB=%{_lib} \
 	E="@:" \
-	Q=
+	Q= \
+	amalg
 
 %install
 rm -rf $RPM_BUILD_ROOT
