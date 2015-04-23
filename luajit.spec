@@ -2,7 +2,7 @@ Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
 Version:	2.0.3
-Release:	1
+Release:	2
 License:	MIT
 Group:		Libraries
 #Source0Download: http://luajit.org/download.html
@@ -50,6 +50,8 @@ Statyczna biblioteka LuaJIT.
 
 %build
 %{__make} \
+	PREFIX=%{_prefix} \
+	MULTILIB=%{_lib} \
 	CC="%{__cc}" \
 	CCOPT="%{rpmcflags} -fomit-frame-pointer" \
 	CCOPT_x86= \
