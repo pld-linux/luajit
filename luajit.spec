@@ -1,3 +1,5 @@
+# TODO
+# - x32 not supported by upstream: http://www.freelists.org/post/luajit/Building-luajit202-on-x32,1
 Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
