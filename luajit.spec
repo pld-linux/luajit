@@ -3,16 +3,16 @@
 Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
-Version:	2.0.4
+Version:	2.0.5
 Release:	1
 License:	MIT
 Group:		Libraries
 # Source0Download: http://luajit.org/download.html
 Source0:	http://luajit.org/download/LuaJIT-%{version}.tar.gz
-# Source0-md5:	dd9c38307f2223a504cbfb96e477eca0
+# Source0-md5:	48353202cbcacab84ee41a5a70ea0a2c
 URL:		http://luajit.org/
 BuildRequires:	sed >= 4.0
-ExclusiveArch:	%{ix86} %{x8664} arm mips ppc
+ExclusiveArch:	%{ix86} %{x8664} %{arm} mips ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		lua_abi		5.1
