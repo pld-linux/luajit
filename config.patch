@@ -1,0 +1,37 @@
+diff -ur LuaJIT.orig/Makefile LuaJIT/Makefile
+--- LuaJIT.orig/Makefile	2022-04-30 23:04:52.495418337 +0200
++++ LuaJIT/Makefile	2022-04-30 23:08:13.919532873 +0200
+@@ -77,7 +77,8 @@
+ UNINSTALL= $(RM)
+ LDCONFIG= ldconfig -n 2>/dev/null
+ SED_PC= sed -e "s|^prefix=.*|prefix=$(PREFIX)|" \
+-            -e "s|^multilib=.*|multilib=$(MULTILIB)|"
++            -e "s|^multilib=.*|multilib=$(MULTILIB)|" \
++            -e "s|^version=.*|version=$(VERSION)|"
+ 
+ FILE_T= luajit
+ FILE_A= libluajit.a
+diff -ur LuaJIT.orig/src/luaconf.h LuaJIT/src/luaconf.h
+--- LuaJIT.orig/src/luaconf.h	2022-04-29 09:13:18.000000000 +0200
++++ LuaJIT/src/luaconf.h	2022-04-30 23:10:10.372451429 +0200
+@@ -37,7 +37,7 @@
+ #endif
+ #define LUA_LROOT	"/usr/local"
+ #define LUA_LUADIR	"/lua/5.1/"
+-#define LUA_LJDIR	"/luajit-2.1.0-beta3/"
++#define LUA_LJDIR	"/luajit-" VERSION "/"
+ 
+ #ifdef LUA_ROOT
+ #define LUA_JROOT	LUA_ROOT
+diff -ur LuaJIT.orig/src/Makefile LuaJIT/src/Makefile
+--- LuaJIT.orig/src/Makefile	2022-04-29 09:13:18.000000000 +0200
++++ LuaJIT/src/Makefile	2022-04-30 23:09:37.724030857 +0200
+@@ -283,7 +283,7 @@
+   TARGET_XLIBS+= -lpthread
+ endif
+ 
+-TARGET_XCFLAGS+= $(CCOPT_$(TARGET_LJARCH))
++TARGET_XCFLAGS+= $(CCOPT_$(TARGET_LJARCH)) -DVERSION=\"$(VERSION)\"
+ TARGET_ARCH+= $(patsubst %,-DLUAJIT_TARGET=LUAJIT_ARCH_%,$(TARGET_LJARCH))
+ 
+ ifneq (,$(PREFIX))

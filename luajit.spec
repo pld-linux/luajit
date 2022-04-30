@@ -1,18 +1,23 @@
 # TODO
 # - x32 not supported by upstream: http://www.freelists.org/post/luajit/Building-luajit202-on-x32,1
+
+%define		snap		20220429
 Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
-Version:	2.0.5
-Release:	1
+Version:	2.1.0
+Release:	0.%{snap}.1
 License:	MIT
 Group:		Libraries
 # Source0Download: http://luajit.org/download.html
-Source0:	http://luajit.org/download/LuaJIT-%{version}.tar.gz
-# Source0-md5:	48353202cbcacab84ee41a5a70ea0a2c
+Source0:	%{name}-%{version}-%{snap}.tar.xz
+# Source0-md5:	201b01f0b6830a1a2bd70341587e868a
+Patch0:		config.patch
 URL:		http://luajit.org/
 BuildRequires:	sed >= 4.0
-ExclusiveArch:	%{ix86} %{x8664} %{arm} mips ppc
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
+ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips mips64 mipsel ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		lua_abi		5.1
@@ -49,7 +54,8 @@ Static LuaJIT library.
 Statyczna biblioteka LuaJIT.
 
 %prep
-%setup -q -n LuaJIT-%{version}
+%setup -q -n LuaJIT
+%patch0 -p1
 
 # preserve timestamps
 sed -i -e '/install -m/s/-m/-p -m/' Makefile
@@ -59,11 +65,13 @@ sed -i -e '/install -m/s/-m/-p -m/' Makefile
 # E= @: - disable @echo messages
 # NOTE: we use amalgamated build as per documentation suggestion doc/install.html
 %{__make} \
+	VERSION="%{version}" \
 	PREFIX=%{_prefix} \
 	MULTILIB=%{_lib} \
 	CC="%{__cc}" \
 	CCOPT="%{rpmcflags} -fomit-frame-pointer" \
 	CCOPT_x86= \
+	LDFLAGS="%{rpmldflags}" \
 	MULTILIB=%{_lib} \
 	E="@:" \
 	Q= \
@@ -73,9 +81,17 @@ sed -i -e '/install -m/s/-m/-p -m/' Makefile
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
+	VERSION="%{version}" \
 	PREFIX=%{_prefix} \
 	MULTILIB=%{_lib} \
+	INSTALL_BIN=$RPM_BUILD_ROOT%{_bindir} \
+	INSTALL_LIB=$RPM_BUILD_ROOT%{_libdir} \
+	INSTALL_SHARE=$RPM_BUILD_ROOT%{_datadir} \
+	INSTALL_MAN=$RPM_BUILD_ROOT%{_mandir}/man1 \
+	INSTALL_PKGCONFIG=$RPM_BUILD_ROOT%{_pkgconfigdir} \
 	LDCONFIG="/sbin/ldconfig -n"
+
+ln -s luajit-%{version} $RPM_BUILD_ROOT%{_bindir}/luajit
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -102,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/*
 %attr(755,root,root) %{_libdir}/libluajit-%{lua_abi}.so
-%{_includedir}/luajit-2.0
+%{_includedir}/luajit-2.1
 %{_pkgconfigdir}/luajit.pc
 
 %files static
