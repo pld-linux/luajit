@@ -21,6 +21,7 @@ ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips mips64 mipsel ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		lua_abi		5.1
+%define		luajit_abi		2.1
 
 %description
 LuaJIT is a Just-In-Time (JIT) compiler for the Lua programming
@@ -68,22 +69,26 @@ sed -i -e '/install -m/s/-m/-p -m/' Makefile
 	VERSION="%{version}" \
 	PREFIX=%{_prefix} \
 	MULTILIB=%{_lib} \
+	LMULTILIB=%{_lib} \
 	CC="%{__cc}" \
 	CCOPT="%{rpmcflags} -fomit-frame-pointer" \
 	CCOPT_x86= \
 	LDFLAGS="%{rpmldflags}" \
-	MULTILIB=%{_lib} \
 	E="@:" \
 	Q= \
 	amalg
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT%{_libdir}/luajit/%{luajit_abi}
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	VERSION="%{version}" \
 	PREFIX=%{_prefix} \
 	MULTILIB=%{_lib} \
+	LMULTILIB=%{_lib} \
 	INSTALL_BIN=$RPM_BUILD_ROOT%{_bindir} \
 	INSTALL_LIB=$RPM_BUILD_ROOT%{_libdir} \
 	INSTALL_SHARE=$RPM_BUILD_ROOT%{_datadir} \
@@ -106,7 +111,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/luajit-%{version}
 %attr(755,root,root) %{_libdir}/libluajit-%{lua_abi}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libluajit-%{lua_abi}.so.2
-%{_datadir}/luajit-%{version}
+%dir %{_libdir}/luajit
+%dir %{_libdir}/luajit/%{luajit_abi}
+%dir %{_datadir}/luajit
+%{_datadir}/luajit/%{luajit_abi}
 %{_mandir}/man1/luajit.1*
 # lua module dirs (shared with lua interpreters)
 %dir %{_libdir}/lua
@@ -118,7 +126,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/*
 %attr(755,root,root) %{_libdir}/libluajit-%{lua_abi}.so
-%{_includedir}/luajit-2.1
+%{_includedir}/luajit-%{luajit_abi}
 %{_pkgconfigdir}/luajit.pc
 
 %files static
