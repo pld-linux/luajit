@@ -17,6 +17,7 @@ URL:		http://luajit.org/
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
+Requires:	%{name}-libs = %{version}-%{release}
 ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips mips64 mipsel ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -30,11 +31,22 @@ language.
 %description -l pl.UTF-8
 LuaJIT to działający w locie (Just-In-Time) kompilator języka Lua.
 
+%package libs
+Summary:	LuaJIT libraries
+Summary(pl.UTF-8):	Biblioteki LuaJIT
+Group:		Libraries
+
+%description libs
+LuaJIT libraries.
+
+%description libs -l pl.UTF-8
+Biblioteki LuaJIT.
+
 %package devel
 Summary:	Header files for LuaJIT library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki LuaJIT
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
 Header files for LuaJIT library.
@@ -101,21 +113,24 @@ ln -s luajit-%{version} $RPM_BUILD_ROOT%{_bindir}/luajit
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	-p /sbin/ldconfig
-%postun	-p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT README
 %attr(755,root,root) %{_bindir}/luajit
 %attr(755,root,root) %{_bindir}/luajit-%{version}
+%{_mandir}/man1/luajit.1*
+
+%files libs
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libluajit-%{lua_abi}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libluajit-%{lua_abi}.so.2
 %dir %{_libdir}/luajit
 %dir %{_libdir}/luajit/%{luajit_abi}
 %dir %{_datadir}/luajit
 %{_datadir}/luajit/%{luajit_abi}
-%{_mandir}/man1/luajit.1*
 # lua module dirs (shared with lua interpreters)
 %dir %{_libdir}/lua
 %dir %{_libdir}/lua/%{lua_abi}
