@@ -86,6 +86,7 @@ sed -i -e '/install -m/s/-m/-p -m/' Makefile
 	CCOPT="%{rpmcflags} -fomit-frame-pointer" \
 	CCOPT_x86= \
 	LDFLAGS="%{rpmldflags}" \
+	TARGET_STRIP=: \
 	E="@:" \
 	Q= \
 	amalg
