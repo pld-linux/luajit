@@ -2,8 +2,8 @@ diff -ur LuaJIT.orig/Makefile LuaJIT/Makefile
 --- LuaJIT.orig/Makefile	2022-05-01 14:24:18.622666652 +0200
 +++ LuaJIT/Makefile	2022-05-01 14:40:11.423331452 +0200
 @@ -35,7 +35,7 @@
- INSTALL_SHARE= $(DPREFIX)/share
- INSTALL_INC=   $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
+ INSTALL_DEFINC= $(DPREFIX)/include/luajit-$(MAJVER).$(MINVER)
+ INSTALL_INC=   $(INSTALL_DEFINC)
  
 -INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit-$(VERSION)
 +INSTALL_LJLIBD= $(INSTALL_SHARE)/luajit/$(MAJVER).$(MINVER)
@@ -17,9 +17,9 @@ diff -ur LuaJIT.orig/Makefile LuaJIT/Makefile
 -            -e "s|^multilib=.*|multilib=$(MULTILIB)|"
 +            -e "s|^multilib=.*|multilib=$(MULTILIB)|" \
 +            -e "s|^version=.*|version=$(VERSION)|"
- 
- FILE_T= luajit
- FILE_A= libluajit.a
+ ifneq ($(INSTALL_DEFINC),$(INSTALL_INC))
+   SED_PC+= -e "s|^includedir=.*|includedir=$(INSTALL_INC)|"
+ endif
 diff -ur LuaJIT.orig/src/luaconf.h LuaJIT/src/luaconf.h
 --- LuaJIT.orig/src/luaconf.h	2022-04-29 09:13:18.000000000 +0200
 +++ LuaJIT/src/luaconf.h	2022-05-01 14:36:10.660525525 +0200

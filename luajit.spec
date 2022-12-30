@@ -1,7 +1,7 @@
 # TODO
 # - x32 not supported by upstream: http://www.freelists.org/post/luajit/Building-luajit202-on-x32,1
 
-%define		snap		20220429
+%define		snap		20221222
 Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
@@ -11,7 +11,7 @@ License:	MIT
 Group:		Libraries
 # Source0Download: http://luajit.org/download.html
 Source0:	%{name}-%{version}-%{snap}.tar.xz
-# Source0-md5:	201b01f0b6830a1a2bd70341587e868a
+# Source0-md5:	1b06e2bcacc09537f9d67dc3d636bd84
 Patch0:		config.patch
 URL:		http://luajit.org/
 BuildRequires:	sed >= 4.0
@@ -67,7 +67,7 @@ Static LuaJIT library.
 Statyczna biblioteka LuaJIT.
 
 %prep
-%setup -q -n LuaJIT
+%setup -q -n luajit
 %patch0 -p1
 
 # preserve timestamps
