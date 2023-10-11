@@ -1,7 +1,9 @@
 # TODO
 # - x32 not supported by upstream: http://www.freelists.org/post/luajit/Building-luajit202-on-x32,1
 
-%define		snap		20230712
+%define		snap		20231008
+# git show -s --format=%ct
+%define		rolling_ver	1696795921
 Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
@@ -11,7 +13,7 @@ License:	MIT
 Group:		Libraries
 # Source0Download: http://luajit.org/download.html
 Source0:	%{name}-%{version}-%{snap}.tar.xz
-# Source0-md5:	5923912a8c25122549aaacfaa9644ed1
+# Source0-md5:	fe5b266c010ffa72a2c327c23544d92a
 Patch0:		config.patch
 URL:		http://luajit.org/
 BuildRequires:	sed >= 4.0
@@ -73,6 +75,8 @@ Statyczna biblioteka LuaJIT.
 # preserve timestamps
 sed -i -e '/install -m/s/-m/-p -m/' Makefile
 
+echo %{rolling_ver} > .relver
+
 %build
 # Q= - enable verbose output
 # E= @: - disable @echo messages
@@ -108,8 +112,6 @@ install -d $RPM_BUILD_ROOT%{_libdir}/luajit/%{luajit_abi}
 	INSTALL_MAN=$RPM_BUILD_ROOT%{_mandir}/man1 \
 	INSTALL_PKGCONFIG=$RPM_BUILD_ROOT%{_pkgconfigdir} \
 	LDCONFIG="/sbin/ldconfig -n"
-
-ln -s luajit-%{version} $RPM_BUILD_ROOT%{_bindir}/luajit
 
 %clean
 rm -rf $RPM_BUILD_ROOT
