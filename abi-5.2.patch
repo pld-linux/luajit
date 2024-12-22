@@ -33,6 +33,17 @@
  multilib=lib
 --- luajit/src/Makefile~	2024-12-22 21:21:53.000000000 +0100
 +++ luajit/src/Makefile	2024-12-22 22:05:27.549999703 +0100
+@@ -12,8 +12,8 @@
+ 
+ MAJVER=  2
+ MINVER=  1
+-ABIVER=  5.1
+-NODOTABIVER= 51
++ABIVER=  5.2
++NODOTABIVER= 52
+ 
+ ##############################################################################
+ #############################  COMPILER OPTIONS  #############################
 @@ -98,7 +98,7 @@
  # enabled by default. Some other features that *might* break some existing
  # code (e.g. __pairs or os.execute() return values) can be enabled here.
