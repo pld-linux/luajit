@@ -1,0 +1,33 @@
+--- luajit/Makefile~	2024-12-22 21:14:21.000000000 +0100
++++ luajit/Makefile	2024-12-22 21:19:35.786666153 +0100
+@@ -15,7 +15,7 @@
+ 
+ MAJVER=  2
+ MINVER=  1
+-ABIVER=  5.1
++ABIVER=  5.2
+ 
+ # LuaJIT uses rolling releases. The release version is based on the time of
+ # the latest git commit. The 'git' command must be available during the build.
+--- luajit/src/luaconf.h~	2024-12-22 21:14:21.000000000 +0100
++++ luajit/src/luaconf.h	2024-12-22 21:20:27.446666155 +0100
+@@ -36,7 +36,7 @@
+ #define LUA_LMULTILIB	"lib"
+ #endif
+ #define LUA_LROOT	"/usr/local"
+-#define LUA_LUADIR	"/lua/5.1/"
++#define LUA_LUADIR	"/lua/5.2/"
+ #define LUA_LJDIR	"/luajit/" MAJVER "." MINVER "/"
+ 
+ #ifdef LUA_ROOT
+--- luajit/etc/luajit.pc~	2024-07-09 00:14:05.000000000 +0200
++++ luajit/etc/luajit.pc	2024-12-22 21:45:06.933332925 +0100
+@@ -3,7 +3,7 @@
+ minver=1
+ relver=ROLLING
+ version=${majver}.${minver}.${relver}
+-abiver=5.1
++abiver=5.2
+ 
+ prefix=/usr/local
+ multilib=lib

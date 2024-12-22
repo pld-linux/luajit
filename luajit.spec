@@ -8,13 +8,14 @@ Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
 Version:	2.1.0
-Release:	0.%{snap}.1
+Release:	0.%{snap}.2
 License:	MIT
 Group:		Libraries
 # Source0Download: http://luajit.org/download.html
 Source0:	%{name}-%{version}-%{snap}.tar.xz
 # Source0-md5:	8a1c8fe490bf2619948dcc5790c06361
 Patch0:		config.patch
+Patch1:		abi-5.2.patch
 URL:		http://luajit.org/
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
@@ -23,8 +24,8 @@ Requires:	%{name}-libs = %{version}-%{release}
 ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips mips64 mipsel ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		lua_abi		5.1
-%define		luajit_abi		2.1
+%define		lua_abi		5.2
+%define		luajit_abi	2.1
 
 %description
 LuaJIT is a Just-In-Time (JIT) compiler for the Lua programming
@@ -70,7 +71,8 @@ Statyczna biblioteka LuaJIT.
 
 %prep
 %setup -q -n luajit
-%patch0 -p1
+%patch -P 0 -p1
+%patch -P 1 -p1
 
 # preserve timestamps
 sed -i -e '/install -m/s/-m/-p -m/' Makefile
@@ -129,7 +131,7 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libluajit-%{lua_abi}.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libluajit-%{lua_abi}.so.2
+%attr(755,root,root) %ghost %{_libdir}/libluajit-*.so.2
 %dir %{_libdir}/luajit
 %dir %{_libdir}/luajit/%{luajit_abi}
 %dir %{_datadir}/luajit
