@@ -8,7 +8,7 @@ Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
 Version:	2.1.0
-Release:	0.%{snap}.3
+Release:	0.%{snap}.4
 License:	MIT
 Group:		Libraries
 # Source0Download: http://luajit.org/download.html
