@@ -1,5 +1,9 @@
 # TODO
 # - x32 not supported by upstream: http://www.freelists.org/post/luajit/Building-luajit202-on-x32,1
+#
+# Conditional build:
+%bcond_without	lua51		# LuaJIT without Lua 5.2 extensions
+%bcond_without	lua52		# LuaJIT with Lua 5.2 extensions
 
 %define		snap		20240704
 # git show -s --format=%ct
@@ -145,6 +149,7 @@ Statyczna biblioteka LuaJIT (z rozszerzeniami Lua 5.2).
 
 %prep
 %setup -qcT
+%if %{with lua51}
 tar --one-top-level=luajit-51 --strip-components=1 -xf %{SOURCE0}
 cd luajit-51
 %patch -P 0 -p1
@@ -154,6 +159,8 @@ sed -i -e '/install -m/s/-m/-p -m/' Makefile
 
 echo %{rolling_ver} > .relver
 cd ..
+%endif
+%if %{with lua52}
 tar --one-top-level=luajit-52 --strip-components=1 -xf %{SOURCE0}
 cd luajit-52
 %patch -P 0 -p1
@@ -164,12 +171,13 @@ sed -i -e '/install -m/s/-m/-p -m/' Makefile
 
 echo %{rolling_ver} > .relver
 cd ..
+%endif
 
 %build
 # Q= - enable verbose output
 # E= @: - disable @echo messages
 # NOTE: we use amalgamated build as per documentation suggestion doc/install.html
-for v in 51 52; do
+for v in %{?with_lua51:51} %{?with_lua52:52}; do
 %{__make} -C luajit-$v \
 	VERSION="%{version}" \
 	PREFIX=%{_prefix} \
@@ -190,6 +198,7 @@ rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_libdir}/luajit/%{luajit_abi}
 
+%if %{with lua52}
 %{__make} -C luajit-52 install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	VERSION="%{version}" \
@@ -203,10 +212,13 @@ install -d $RPM_BUILD_ROOT%{_libdir}/luajit/%{luajit_abi}
 	INSTALL_PKGCONFIG=$RPM_BUILD_ROOT%{_pkgconfigdir} \
 	LDCONFIG="/sbin/ldconfig -n"
 %{__mv} $RPM_BUILD_ROOT%{_bindir}/luajit{,52}-%{version}
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/luajit
 %{__ln_s} luajit52-%{version} $RPM_BUILD_ROOT%{_bindir}/luajit52
 %{__mv} $RPM_BUILD_ROOT%{_pkgconfigdir}/luajit{,52}.pc
 %{__mv} $RPM_BUILD_ROOT%{_mandir}/man1/luajit{,52}.1
+%endif
 
+%if %{with lua51}
 %{__make} -C luajit-51 install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	VERSION="%{version}" \
@@ -219,6 +231,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}/luajit/%{luajit_abi}
 	INSTALL_MAN=$RPM_BUILD_ROOT%{_mandir}/man1 \
 	INSTALL_PKGCONFIG=$RPM_BUILD_ROOT%{_pkgconfigdir} \
 	LDCONFIG="/sbin/ldconfig -n"
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -229,12 +242,14 @@ rm -rf $RPM_BUILD_ROOT
 %post	-n luajit52-libs -p /sbin/ldconfig
 %postun	-n luajit52-libs -p /sbin/ldconfig
 
+%if %{with lua51}
 %files
 %defattr(644,root,root,755)
 %doc luajit-51/{COPYRIGHT,README}
 %attr(755,root,root) %{_bindir}/luajit
 %attr(755,root,root) %{_bindir}/luajit-%{version}
 %{_mandir}/man1/luajit.1*
+%endif
 
 %files common
 %defattr(644,root,root,755)
@@ -244,6 +259,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/luajit/%{luajit_abi}
 %dir %{_libdir}/lua
 
+%if %{with lua51}
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libluajit-5.1.so.*.*.*
@@ -251,12 +267,14 @@ rm -rf $RPM_BUILD_ROOT
 # lua module dirs (shared with lua interpreters)
 %dir %{_libdir}/lua/5.1
 %dir %{_datadir}/lua/5.1
+%endif
 
 %files common-devel
 %defattr(644,root,root,755)
-%doc luajit-51/doc/*
+%doc luajit-%{?with_lua51:51}%{!?with_lua51:52}/doc/*
 %{_includedir}/luajit-%{luajit_abi}
 
+%if %{with lua51}
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libluajit-5.1.so
@@ -265,7 +283,9 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libluajit-5.1.a
+%endif
 
+%if %{with lua52}
 %files -n luajit52
 %defattr(644,root,root,755)
 %doc luajit-52/{COPYRIGHT,README}
@@ -289,3 +309,4 @@ rm -rf $RPM_BUILD_ROOT
 %files -n luajit52-static
 %defattr(644,root,root,755)
 %{_libdir}/libluajit-5.2.a
+%endif
