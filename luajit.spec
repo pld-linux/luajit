@@ -6,7 +6,7 @@
 %bcond_without	lua52		# LuaJIT with Lua 5.2 extensions
 
 %define		snap		20240704
-%define		rel		5
+%define		rel		6
 # git show -s --format=%ct
 %define		rolling_ver	1720049189
 Summary:	Just-in-Time compiler for Lua
@@ -42,6 +42,7 @@ LuaJIT to działający w locie (Just-In-Time) kompilator języka Lua.
 Summary:	Common files for LuaJIT libraries
 Summary(pl.UTF-8):	Pliki wspólne dla bibliotek LuaJIT
 Group:		Libraries
+Conflicts:	luajit-libs < 2.1.0-0.20240704.5
 
 %description common
 Common files for LuaJIT libraries.
@@ -65,6 +66,7 @@ Biblioteki LuaJIT.
 Summary:	Common header files for LuaJIT library
 Summary(pl.UTF-8):	Wspólne pliki nagłówkowe biblioteki LuaJIT
 Group:		Development/Libraries
+Conflicts:	luajit-devel < 2.1.0-0.20240704.5
 
 %description common-devel
 Common header files for LuaJIT library.
