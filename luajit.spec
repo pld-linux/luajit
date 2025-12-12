@@ -5,10 +5,10 @@
 %bcond_without	lua51		# LuaJIT without Lua 5.2 extensions
 %bcond_without	lua52		# LuaJIT with Lua 5.2 extensions
 
-%define		snap		20240704
-%define		rel		6
+%define		snap		20251208
+%define		rel		1
 # git show -s --format=%ct
-%define		rolling_ver	1720049189
+%define		rolling_ver	1765228720
 Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
@@ -18,7 +18,7 @@ License:	MIT
 Group:		Libraries
 # Source0Download: http://luajit.org/download.html
 Source0:	%{name}-%{version}-%{snap}.tar.xz
-# Source0-md5:	8a1c8fe490bf2619948dcc5790c06361
+# Source0-md5:	0b581f57990134db706b41360a4b54ff
 Patch0:		config.patch
 Patch1:		abi-5.2.patch
 URL:		http://luajit.org/
