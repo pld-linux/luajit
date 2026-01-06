@@ -19,21 +19,29 @@
  ifneq ($(INSTALL_DEFINC),$(INSTALL_INC))
    SED_PC+= -e "s|^includedir=.*|includedir=$(INSTALL_INC)|"
  endif
---- luajit-51/src/luaconf.h.orig	2025-12-12 20:36:17.000000000 +0100
-+++ luajit-51/src/luaconf.h	2025-12-12 22:36:43.720569851 +0100
-@@ -50,18 +50,19 @@
+--- luajit/src/luaconf.h.orig	2025-12-12 20:36:17.000000000 +0100
++++ luajit/src/luaconf.h	2026-01-06 22:34:08.524022412 +0100
+@@ -36,6 +36,7 @@
+ #endif
+ #define LUA_LROOT	"/usr/local"
+ #define LUA_LUADIR	"/lua/5.1/"
++#define LUA_JLUADIR	"/luajit/" MAJVER "." MINVER "/"
+ 
+ #ifdef LUA_ROOT
+ #define LUA_JROOT	LUA_ROOT
+@@ -50,18 +51,19 @@
  #endif
  
  #ifndef LUA_LJDIR
 -#define LUA_LJDIR	LUA_JROOT "/share/luajit-2.1"
-+#define LUA_LJDIR	LUA_JROOT "/share/luajit" MAJVER "." MINVER "/"
++#define LUA_LJDIR	LUA_JROOT "/share" LUA_JLUADIR
  #endif
  
  #define LUA_JPATH	";" LUA_LJDIR "/?.lua"
  #define LUA_LLDIR	LUA_LROOT "/share" LUA_LUADIR
  #define LUA_LCDIR	LUA_LROOT "/" LUA_LMULTILIB LUA_LUADIR
  #define LUA_LLPATH	";" LUA_LLDIR "?.lua;" LUA_LLDIR "?/init.lua"
-+#define LUA_JCPATH	";" LUA_ROOT "/" LUA_MULTILIB LUA_LJDIR "?.so"
++#define LUA_JCPATH	";" LUA_ROOT "/" LUA_MULTILIB LUA_JLUADIR "?.so"
  #define LUA_LCPATH1	";" LUA_LCDIR "?.so"
  #define LUA_LCPATH2	";" LUA_LCDIR "loadall.so"
  
