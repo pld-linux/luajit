@@ -6,7 +6,7 @@
 %bcond_without	lua52		# LuaJIT with Lua 5.2 extensions
 
 %define		snap		20251208
-%define		rel		5
+%define		rel		6
 # git show -s --format=%ct
 %define		rolling_ver	1765228720
 Summary:	Just-in-Time compiler for Lua

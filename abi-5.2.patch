@@ -17,9 +17,9 @@
  #define LUA_LROOT	"/usr/local"
 -#define LUA_LUADIR	"/lua/5.1/"
 +#define LUA_LUADIR	"/lua/5.2/"
+ #define LUA_JLUADIR	"/luajit/" MAJVER "." MINVER "/"
  
  #ifdef LUA_ROOT
- #define LUA_JROOT	LUA_ROOT
 --- luajit/etc/luajit.pc~	2024-07-09 00:14:05.000000000 +0200
 +++ luajit/etc/luajit.pc	2024-12-22 21:45:06.933332925 +0100
 @@ -3,7 +3,7 @@
