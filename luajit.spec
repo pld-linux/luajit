@@ -5,10 +5,11 @@
 %bcond_without	lua51		# LuaJIT without Lua 5.2 extensions
 %bcond_without	lua52		# LuaJIT with Lua 5.2 extensions
 
-%define		snap		20251208
-%define		rel		6
+%define		snap		20261014
+%define		commit		2a8e017ef1ece6a95b983ffca073d30609dce7c4
+%define		rel		1
 # git show -s --format=%ct
-%define		rolling_ver	1765228720
+%define		rolling_ver	1791988261
 Summary:	Just-in-Time compiler for Lua
 Summary(pl.UTF-8):	Kompilator JIT dla języka Lua
 Name:		luajit
@@ -16,15 +17,15 @@ Version:	2.1.0
 Release:	0.%{snap}.%{rel}
 License:	MIT
 Group:		Libraries
-# Source0Download: http://luajit.org/download.html
-Source0:	%{name}-%{version}-%{snap}.tar.xz
-# Source0-md5:	0b581f57990134db706b41360a4b54ff
+# Source0Download: https://luajit.org/download.html
+Source0:	https://github.com/LuaJIT/LuaJIT/archive/%{commit}/%{name}-%{version}-%{snap}.tar.gz
+# Source0-md5:	385b8aabeb7c05b9fd30f1d3e9fa7f0a
 Patch0:		config.patch
 Patch1:		abi-5.2.patch
-URL:		http://luajit.org/
+URL:		https://luajit.org/
 BuildRequires:	sed >= 4.0
-BuildRequires:	tar >= 1:1.22
-BuildRequires:	xz
+# --one-top-level
+BuildRequires:	tar >= 1:1.28
 Requires:	%{name}-libs = %{version}-%{release}
 ExclusiveArch:	%{ix86} %{x8664} %{arm} aarch64 mips mips64 mipsel ppc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -155,7 +156,7 @@ Statyczna biblioteka LuaJIT (z rozszerzeniami Lua 5.2).
 %if %{with lua51}
 tar --one-top-level=luajit-51 --strip-components=1 -xf %{SOURCE0}
 cd luajit-51
-%patch -P 0 -p1
+%patch -P0 -p1
 
 # preserve timestamps
 sed -i -e '/install -m/s/-m/-p -m/' Makefile
@@ -166,8 +167,8 @@ cd ..
 %if %{with lua52}
 tar --one-top-level=luajit-52 --strip-components=1 -xf %{SOURCE0}
 cd luajit-52
-%patch -P 0 -p1
-%patch -P 1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 
 # preserve timestamps
 sed -i -e '/install -m/s/-m/-p -m/' Makefile
@@ -265,8 +266,8 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with lua51}
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libluajit-5.1.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libluajit-5.1.so.2
+%{_libdir}/libluajit-5.1.so.*.*.*
+%ghost %{_libdir}/libluajit-5.1.so.2
 # lua module dirs (shared with lua interpreters)
 %dir %{_libdir}/lua/5.1
 %dir %{_datadir}/lua/5.1
@@ -280,7 +281,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with lua51}
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libluajit-5.1.so
+%{_libdir}/libluajit-5.1.so
 %{_pkgconfigdir}/luajit.pc
 
 %files static
@@ -298,15 +299,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n luajit52-libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libluajit-5.2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libluajit-5.2.so.2
+%{_libdir}/libluajit-5.2.so.*.*.*
+%ghost %{_libdir}/libluajit-5.2.so.2
 # lua module dirs (shared with lua interpreters)
 %dir %{_libdir}/lua/5.2
 %dir %{_datadir}/lua/5.2
 
 %files -n luajit52-devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libluajit-5.2.so
+%{_libdir}/libluajit-5.2.so
 %{_pkgconfigdir}/luajit52.pc
 
 %files -n luajit52-static
